@@ -1,0 +1,1 @@
+"""Recolector TCP independiente."""

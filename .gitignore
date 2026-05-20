@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local environment
+.env
+
+# PlatformIO
+.pio/
+.vscode/
+
+# OS metadata
+Thumbs.db
+.DS_Store
+__MACOSX/

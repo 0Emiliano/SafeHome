@@ -1,0 +1,254 @@
+/* SafeHome - Hoja de estilos */
+/* Tema oscuro, sin frameworks externos */
+
+:root {
+    --bg:         #121212;
+    --surface:    #1e1e1e;
+    --surface2:   #2a2a2a;
+    --border:     #333333;
+    --text:       #e0e0e0;
+    --text-dim:   #9e9e9e;
+    --accent:     #4fc3f7;
+    --green:      #4caf50;
+    --red:        #f44336;
+    --amber:      #ffa726;
+    --radius:     8px;
+    --shadow:     0 2px 8px rgba(0,0,0,0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* --- Encabezado --- */
+
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+#ultima-actualizacion {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+}
+
+/* --- Contenido principal --- */
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+section {
+    margin-bottom: 2.5rem;
+}
+
+section h2 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* --- Grid de tarjetas --- */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 400px;
+}
+
+/* --- Tarjeta de sensor --- */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+}
+
+.card:hover {
+    border-color: var(--accent);
+}
+
+.card-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+}
+
+.card-unit {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+}
+
+/* Estado del PIR */
+.pir-on  { color: var(--red); }
+.pir-off { color: var(--text-dim); font-size: 1rem; }
+
+/* --- Badges de actuadores --- */
+
+.badge {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.45rem 1.4rem;
+    border-radius: 999px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+}
+
+.badge-on  {
+    background: var(--green);
+    color: #fff;
+}
+
+.badge-off {
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+}
+
+/* --- Formulario de configuracion --- */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+label {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+}
+
+input[type="number"] {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    padding: 0.55rem 0.8rem;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"]:focus {
+    border-color: var(--accent);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+button[type="submit"] {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.6rem 1.6rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+button[type="submit"]:hover  { opacity: 0.85; }
+button[type="submit"]:active { transform: scale(0.97); }
+
+#config-msg {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.msg-ok    { color: var(--green); }
+.msg-error { color: var(--red); }
+
+/* --- Responsive --- */
+
+@media (max-width: 520px) {
+    .grid-2 {
+        grid-template-columns: 1fr 1fr;
+        max-width: 100%;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+
+    .card-value {
+        font-size: 1.5rem;
+    }
+}

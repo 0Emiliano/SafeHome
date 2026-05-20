@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHome</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+    <h1>SafeHome</h1>
+    <span id="ultima-actualizacion">Conectando...</span>
+</header>
+
+<main>
+
+    <!-- Seccion de sensores -->
+    <section>
+        <h2>Sensores</h2>
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-label">Temperatura AHT20</div>
+                <div class="card-value" id="tempAHT">--</div>
+                <div class="card-unit">C</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Humedad Relativa</div>
+                <div class="card-value" id="humedad">--</div>
+                <div class="card-unit">%</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Temperatura BMP280</div>
+                <div class="card-value" id="tempBMP">--</div>
+                <div class="card-unit">C</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Presion Barometrica</div>
+                <div class="card-value" id="presion">--</div>
+                <div class="card-unit">hPa</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Luz (LDR)</div>
+                <div class="card-value" id="ldr">--</div>
+                <div class="card-unit">ADC</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Movimiento (PIR)</div>
+                <div class="card-value pir-off" id="pir">--</div>
+                <div class="card-unit"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Seccion de actuadores -->
+    <section>
+        <h2>Actuadores</h2>
+        <div class="grid grid-2">
+
+            <div class="card">
+                <div class="card-label">Relay</div>
+                <div class="badge badge-off" id="relay-badge">--</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Servo</div>
+                <div class="badge badge-off" id="servo-badge">--</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Seccion de configuracion -->
+    <section>
+        <h2>Configuracion</h2>
+        <form id="config-form">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="umbralLuz">Umbral de Luz (ADC 0-4095)</label>
+                    <input type="number" id="umbralLuz" name="umbralLuz"
+                           min="0" max="4095" step="50" placeholder="2000">
+                </div>
+
+                <div class="form-group">
+                    <label for="umbralTemp">Umbral de Temperatura (C)</label>
+                    <input type="number" id="umbralTemp" name="umbralTemp"
+                           min="0" max="100" step="0.5" placeholder="30.0">
+                </div>
+
+                <div class="form-group">
+                    <label for="tiempoServo">Tiempo Servo Abierto (ms)</label>
+                    <input type="number" id="tiempoServo" name="tiempoServo"
+                           min="500" max="30000" step="500" placeholder="3000">
+                </div>
+
+                <div class="form-group">
+                    <label for="intervaloSensado">Intervalo de Sensado (ms)</label>
+                    <input type="number" id="intervaloSensado" name="intervaloSensado"
+                           min="500" max="60000" step="500" placeholder="2000">
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Aplicar Configuracion</button>
+                <span id="config-msg"></span>
+            </div>
+        </form>
+    </section>
+
+</main>
+
+<script>
+    // Actualiza la interfaz con los datos recibidos de /api/status
+    function actualizarUI(data) {
+        const s = data.sensores;
+        const a = data.actuadores;
+        const c = data.config;
+
+        // --- Sensores ---
+        document.getElementById('tempAHT').textContent = s.tempAHT.toFixed(1);
+        document.getElementById('humedad').textContent  = s.humedad.toFixed(1);
+        document.getElementById('tempBMP').textContent  = s.tempBMP.toFixed(1);
+        document.getElementById('presion').textContent  = s.presion.toFixed(1);
+        document.getElementById('ldr').textContent      = s.ldr;
+
+        const pirEl = document.getElementById('pir');
+        if (s.pir) {
+            pirEl.textContent = 'DETECTADO';
+            pirEl.className   = 'card-value pir-on';
+        } else {
+            pirEl.textContent = 'Sin movimiento';
+            pirEl.className   = 'card-value pir-off';
+        }
+
+        // --- Actuadores ---
+        const relayEl = document.getElementById('relay-badge');
+        relayEl.textContent = a.relay ? 'ON' : 'OFF';
+        relayEl.className   = 'badge ' + (a.relay ? 'badge-on' : 'badge-off');
+
+        const servoEl = document.getElementById('servo-badge');
+        servoEl.textContent = a.servo ? 'ABIERTO' : 'CERRADO';
+        servoEl.className   = 'badge ' + (a.servo ? 'badge-on' : 'badge-off');
+
+        // --- Configuracion: actualizar campos solo si ninguno tiene foco ---
+        if (!document.activeElement || document.activeElement.tagName !== 'INPUT') {
+            document.getElementById('umbralLuz').value        = c.umbralLuz;
+            document.getElementById('umbralTemp').value       = c.umbralTemp;
+            document.getElementById('tiempoServo').value      = c.tiempoServo;
+            document.getElementById('intervaloSensado').value = c.intervaloSensado;
+        }
+
+        // Marca de tiempo de la ultima actualizacion
+        document.getElementById('ultima-actualizacion').textContent =
+            'Actualizado: ' + new Date().toLocaleTimeString();
+    }
+
+    // Consulta el estado del sistema cada 2 segundos
+    async function fetchStatus() {
+        try {
+            const res  = await fetch('/api/status');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            actualizarUI(data);
+        } catch (err) {
+            document.getElementById('ultima-actualizacion').textContent =
+                'Error de conexion: ' + err.message;
+        }
+    }
+
+    // Envia la configuracion al ESP32 via POST /api/config
+    document.getElementById('config-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const payload = {
+            umbralLuz:        parseInt(document.getElementById('umbralLuz').value,        10),
+            umbralTemp:       parseFloat(document.getElementById('umbralTemp').value),
+            tiempoServo:      parseInt(document.getElementById('tiempoServo').value,      10),
+            intervaloSensado: parseInt(document.getElementById('intervaloSensado').value, 10)
+        };
+
+        const msgEl = document.getElementById('config-msg');
+
+        try {
+            const res = await fetch('/api/config', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                msgEl.textContent = 'Configuracion guardada correctamente.';
+                msgEl.className   = 'msg-ok';
+            } else {
+                msgEl.textContent = 'Error al guardar (HTTP ' + res.status + ').';
+                msgEl.className   = 'msg-error';
+            }
+        } catch (err) {
+            msgEl.textContent = 'Error de red: ' + err.message;
+            msgEl.className   = 'msg-error';
+        }
+
+        // Limpiar el mensaje de estado despues de 3 segundos
+        setTimeout(function() { msgEl.textContent = ''; }, 3000);
+    });
+
+    // Primera consulta inmediata y luego cada 2 segundos
+    fetchStatus();
+    setInterval(fetchStatus, 2000);
+</script>
+
+</body>
+</html>
