@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f3a5f"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2f855a"/>
+    </marker>
+    <style>
+      .title { font: 700 36px Arial, sans-serif; fill: #102a43; }
+      .subtitle { font: 700 22px Arial, sans-serif; fill: #243b53; }
+      .section { font: 700 19px Arial, sans-serif; fill: #102a43; }
+      .label { font: 700 18px Arial, sans-serif; fill: #102a43; }
+      .small { font: 15px Arial, sans-serif; fill: #334e68; }
+      .tiny { font: 13px Arial, sans-serif; fill: #486581; }
+      .pin { font: 14px Consolas, monospace; fill: #102a43; }
+      .module { fill: #ffffff; stroke: #627d98; stroke-width: 2; rx: 12; }
+      .sensor { fill: #eef8ff; stroke: #3182ce; stroke-width: 2; rx: 12; }
+      .actuator { fill: #ecfdf5; stroke: #2f855a; stroke-width: 2; rx: 12; }
+      .esp { fill: #e0f2fe; stroke: #0f609b; stroke-width: 3; rx: 18; }
+      .power { fill: #fff7ed; stroke: #c05621; stroke-width: 2; rx: 12; }
+      .network { fill: #f5f3ff; stroke: #6d28d9; stroke-width: 2; rx: 12; }
+      .note { fill: #f8fafc; stroke: #bcccdc; stroke-width: 2; rx: 12; }
+      .bus { stroke: #6d28d9; stroke-width: 4; fill: none; marker-end: url(#arrow-purple); }
+      .input { stroke: #1f3a5f; stroke-width: 3; fill: none; marker-end: url(#arrow-blue); }
+      .output { stroke: #2f855a; stroke-width: 3; fill: none; marker-end: url(#arrow-green); }
+      .powerline { stroke: #c05621; stroke-width: 2.5; stroke-dasharray: 9 6; fill: none; }
+      .gnd { stroke: #4a5568; stroke-width: 2.5; stroke-dasharray: 5 6; fill: none; }
+      .wifi { stroke: #6d28d9; stroke-width: 3; stroke-dasharray: 12 8; fill: none; marker-end: url(#arrow-purple); }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1200" fill="#ffffff"/>
+  <text x="60" y="70" class="title">SafeHome - Esquematico elaborado de conexion</text>
+  <text x="60" y="108" class="small">Diagrama logico para protoboard basado en config.h, sensors.cpp, actuators.cpp, api.cpp y tcp_client.cpp.</text>
+
+  <rect x="55" y="145" width="470" height="870" class="note"/>
+  <text x="85" y="185" class="section">Sensores</text>
+
+  <rect x="95" y="225" width="355" height="130" class="sensor"/>
+  <text x="125" y="263" class="label">AHT20</text>
+  <text x="125" y="292" class="small">Temperatura y humedad</text>
+  <text x="125" y="320" class="pin">SDA -&gt; GPIO 21</text>
+  <text x="285" y="320" class="pin">SCL -&gt; GPIO 22</text>
+
+  <rect x="95" y="390" width="355" height="130" class="sensor"/>
+  <text x="125" y="428" class="label">BMP280</text>
+  <text x="125" y="457" class="small">Temperatura y presion barometrica</text>
+  <text x="125" y="485" class="pin">SDA -&gt; GPIO 21</text>
+  <text x="285" y="485" class="pin">SCL -&gt; GPIO 22</text>
+
+  <rect x="95" y="565" width="355" height="120" class="sensor"/>
+  <text x="125" y="603" class="label">PIR</text>
+  <text x="125" y="632" class="small">Deteccion de movimiento</text>
+  <text x="125" y="660" class="pin">OUT -&gt; GPIO 13</text>
+
+  <rect x="95" y="730" width="355" height="180" class="sensor"/>
+  <text x="125" y="768" class="label">LDR + divisor de voltaje</text>
+  <text x="125" y="798" class="small">Medicion analogica de luz</text>
+  <text x="125" y="828" class="pin">Nodo central -&gt; GPIO 34</text>
+  <text x="125" y="860" class="tiny">LDR a 3.3 V, resistencia a GND.</text>
+  <text x="125" y="885" class="tiny">GPIO 34 es solo entrada ADC.</text>
+
+  <rect x="650" y="170" width="420" height="760" class="esp"/>
+  <text x="760" y="220" class="subtitle">ESP32 Dev Module</text>
+  <line x1="685" y1="250" x2="1035" y2="250" stroke="#9fb3c8" stroke-width="2"/>
+  <text x="705" y="292" class="pin">GPIO 21  SDA I2C</text>
+  <text x="705" y="330" class="pin">GPIO 22  SCL I2C</text>
+  <text x="705" y="390" class="pin">GPIO 13  Entrada PIR</text>
+  <text x="705" y="450" class="pin">GPIO 34  Entrada LDR ADC1</text>
+  <text x="705" y="530" class="pin">GPIO 26  Salida relay</text>
+  <text x="705" y="590" class="pin">GPIO 27  PWM servo</text>
+  <text x="705" y="670" class="pin">3.3 V   Alimentacion sensores</text>
+  <text x="705" y="708" class="pin">5 V/VIN  Posible alimentacion modulos</text>
+  <text x="705" y="746" class="pin">GND     Tierra comun</text>
+  <text x="705" y="815" class="small">WiFi: API REST puerto 80</text>
+  <text x="705" y="845" class="small">TCP: envio de lecturas puerto 9000</text>
+
+  <rect x="1245" y="145" width="500" height="495" class="note"/>
+  <text x="1275" y="185" class="section">Actuadores</text>
+
+  <rect x="1290" y="235" width="350" height="140" class="actuator"/>
+  <text x="1320" y="274" class="label">Modulo relay</text>
+  <text x="1320" y="304" class="small">Control de iluminacion</text>
+  <text x="1320" y="334" class="pin">IN &lt;- GPIO 26</text>
+  <text x="1320" y="360" class="tiny">Se activa si ldr &lt; umbralLuz.</text>
+
+  <rect x="1290" y="440" width="350" height="145" class="actuator"/>
+  <text x="1320" y="480" class="label">Servo</text>
+  <text x="1320" y="510" class="small">Control de acceso</text>
+  <text x="1320" y="540" class="pin">Signal &lt;- GPIO 27</text>
+  <text x="1320" y="566" class="tiny">Abre 90 grados si PIR detecta movimiento.</text>
+
+  <rect x="1245" y="690" width="500" height="260" class="network"/>
+  <text x="1275" y="730" class="section">Comunicacion con PC</text>
+  <rect x="1290" y="765" width="350" height="120" class="module"/>
+  <text x="1320" y="804" class="label">PC</text>
+  <text x="1320" y="834" class="small">Recolector TCP Python</text>
+  <text x="1320" y="862" class="small">GUI Python + MySQL safehome</text>
+  <text x="1320" y="890" class="tiny">TCP_SERVER_IP debe apuntar a esta PC.</text>
+
+  <rect x="570" y="980" width="660" height="150" class="power"/>
+  <text x="600" y="1020" class="section">Alimentacion y tierra comun</text>
+  <text x="600" y="1052" class="small">- AHT20 y BMP280 normalmente pueden alimentarse con 3.3 V.</text>
+  <text x="600" y="1080" class="small">- Relay y servo pueden requerir 5 V o fuente externa segun modulo.</text>
+  <text x="600" y="1108" class="small">- Todas las fuentes deben compartir GND con el ESP32.</text>
+
+  <path d="M450 285 C535 285 555 292 650 292" class="bus"/>
+  <path d="M450 455 C535 455 555 330 650 330" class="bus"/>
+  <path d="M450 625 C545 625 565 390 650 390" class="input"/>
+  <path d="M450 820 C555 820 565 450 650 450" class="input"/>
+
+  <path d="M1070 530 C1165 530 1185 305 1290 305" class="output"/>
+  <path d="M1070 590 C1168 590 1185 512 1290 512" class="output"/>
+  <path d="M1070 835 C1160 835 1195 825 1290 825" class="wifi"/>
+
+  <path d="M705 670 C545 720 525 245 450 245" class="powerline"/>
+  <path d="M705 670 C545 730 525 410 450 410" class="powerline"/>
+  <path d="M705 670 C545 750 525 585 450 585" class="powerline"/>
+  <path d="M705 670 C545 775 525 760 450 760" class="powerline"/>
+  <path d="M1035 708 C1160 735 1190 270 1290 270" class="powerline"/>
+  <path d="M1035 708 C1160 755 1190 470 1290 470" class="powerline"/>
+
+  <path d="M705 746 C540 790 520 330 450 330" class="gnd"/>
+  <path d="M705 746 C540 800 520 495 450 495" class="gnd"/>
+  <path d="M705 746 C540 815 520 660 450 660" class="gnd"/>
+  <path d="M705 746 C540 835 520 895 450 895" class="gnd"/>
+  <path d="M1035 746 C1160 785 1190 355 1290 355" class="gnd"/>
+  <path d="M1035 746 C1160 805 1190 560 1290 560" class="gnd"/>
+
+  <rect x="80" y="1045" width="420" height="85" class="note"/>
+  <text x="110" y="1080" class="section">Leyenda</text>
+  <line x1="110" y1="1108" x2="170" y2="1108" class="bus"/>
+  <text x="185" y="1113" class="tiny">Bus I2C</text>
+  <line x1="280" y1="1108" x2="340" y2="1108" class="input"/>
+  <text x="355" y="1113" class="tiny">Entradas</text>
+  <line x1="110" y1="1134" x2="170" y2="1134" class="output"/>
+  <text x="185" y="1139" class="tiny">Salidas</text>
+  <line x1="280" y1="1134" x2="340" y2="1134" class="powerline"/>
+  <text x="355" y="1139" class="tiny">Alimentacion</text>
+</svg>

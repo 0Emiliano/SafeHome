@@ -97,25 +97,11 @@ El esquematico logico identifica los sensores, actuadores y pines usados por el 
 
 ### Diagrama de conexion logica
 
-```mermaid
-flowchart TB
-  ESP["ESP32"]
-  AHT["AHT20\nTemp/Humedad"]
-  BMP["BMP280\nTemp/Presion"]
-  PIR["PIR\nMovimiento"]
-  LDR["LDR\nLuz ADC"]
-  RELAY["Relay\nIluminacion"]
-  SERVO["Servo\nAcceso"]
-  PC["PC\nRecolector TCP + GUI"]
+![Esquematico elaborado de SafeHome](diagramas/esquematico_safehome.svg)
 
-  AHT -- "SDA GPIO21 / SCL GPIO22" --> ESP
-  BMP -- "SDA GPIO21 / SCL GPIO22" --> ESP
-  PIR -- "OUT GPIO13" --> ESP
-  LDR -- "ADC GPIO34" --> ESP
-  ESP -- "GPIO26" --> RELAY
-  ESP -- "PWM GPIO27" --> SERVO
-  ESP -- "WiFi TCP:9000 / REST:80" --> PC
-```
+Version PDF del esquematico:
+
+- `docs/diagramas/esquematico_safehome.pdf`
 
 ### Consideraciones de protoboard
 
@@ -587,4 +573,3 @@ python -m pc_app.gui.app
 - La temporizacion se implementa con `millis()`.
 - Si la rubrica exige estrictamente `NoDelay`, se debe migrar el temporizador de sensado a esa biblioteca.
 - La interfaz web del ESP32 usa HTML, CSS y JavaScript embebido para consumir la API. Si el profesor restringe estrictamente a HTML/CSS/C/Python, se debe reemplazar el JavaScript por HTML generado desde C++ o formularios tradicionales.
-
